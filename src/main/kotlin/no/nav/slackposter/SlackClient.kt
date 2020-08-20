@@ -5,7 +5,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.slf4j.LoggerFactory
 import java.io.IOException
-import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.URL
@@ -39,7 +38,7 @@ class SlackClient(
         )))
     }
 
-    private fun String.post(jsonPayload: String): String? {
+    private fun String.post(jsonPayload: String) {
         var connection: HttpURLConnection? = null
         try {
             connection = (URL(this).openConnection() as HttpURLConnection).apply {
@@ -56,13 +55,8 @@ class SlackClient(
 
             if (connection.responseCode !in 200..299) {
                 logger.warn("response from slack: code=$responseCode")
-                return null
+                return
             }
-
-            val responseBody = connection.inputStream.readText()
-            logger.debug("response from slack: code=$responseCode")
-
-            return responseBody
         } catch (err: SocketTimeoutException) {
             logger.warn("timeout waiting for reply", err)
         } catch (err: IOException) {
@@ -70,9 +64,5 @@ class SlackClient(
         } finally {
             connection?.disconnect()
         }
-
-        return null
     }
-
-    private fun InputStream.readText() = use { it.bufferedReader().readText() }
 }
