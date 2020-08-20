@@ -12,13 +12,6 @@ val githubPassword: String by project
 repositories {
     jcenter()
     mavenCentral()
-    maven {
-        url = uri("https://maven.pkg.github.com/navikt/simple-slack-poster")
-        credentials {
-            username = githubUser
-            password = githubPassword
-        }
-    }
 }
 
 version = properties["version"] ?: "local"
@@ -39,7 +32,7 @@ tasks.withType<KotlinCompile> {
 publishing {
     repositories {
         maven {
-            url = uri("https://maven.pkg.github.com/navikt/btn-common")
+            url = uri("https://maven.pkg.github.com/navikt/simple-slack-poster")
             credentials {
                 username = System.getenv("GITHUB_USERNAME")
                 password = System.getenv("GITHUB_PASSWORD")
