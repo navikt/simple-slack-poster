@@ -22,7 +22,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.4")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.4")
-    implementation("org.slf4j:slf4j-api:2.0.0")
+    implementation("org.slf4j:slf4j-api:2.0.1")
 }
 
 tasks.withType<KotlinCompile> {
