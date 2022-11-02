@@ -10,7 +10,6 @@ val githubUser: String by project
 val githubPassword: String by project
 
 repositories {
-    jcenter()
     mavenCentral()
 }
 
