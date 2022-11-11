@@ -13,34 +13,39 @@ object Kibana {
     private val risonMapper = ObjectMapper(RisonFactory())
 
     fun createUrl(query: String) =
-            createUrl(query, LocalDateTime.now().minusMinutes(1))
+        createUrl(query, LocalDateTime.now().minusMinutes(1))
 
-
-    fun createUrl(query: String, startTime: LocalDateTime, endTime: LocalDateTime? = null, index: String = defaultIndex) =
-            createUrl(query, startTime.isoLocalDateTime(), endTime?.isoLocalDateTime() ?: "now", index)
 
     fun createUrl(
-            query: String,
-            startTime: String,
-            endTime: String = "now",
-            index: String = defaultIndex
+        query: String,
+        startTime: LocalDateTime,
+        endTime: LocalDateTime? = null,
+        index: String = defaultIndex
     ) =
-            String.format(urlFormat, appState(index, query), globalState(startTime, endTime))
+        createUrl(query, startTime.isoLocalDateTime(), endTime?.isoLocalDateTime() ?: "now", index)
+
+    fun createUrl(
+        query: String,
+        startTime: String,
+        endTime: String = "now",
+        index: String = defaultIndex
+    ) =
+        String.format(urlFormat, appState(index, query), globalState(startTime, endTime))
 
     private fun appState(index: String, query: String) = mapOf(
-            "index" to index,
-            "query" to mapOf(
-                    "language" to "lucene",
-                    "query" to query
-            )
+        "index" to index,
+        "query" to mapOf(
+            "language" to "lucene",
+            "query" to query
+        )
     ).toRison()
 
     private fun globalState(startTime: String, endTime: String) = mapOf(
-            "time" to mapOf(
-                    "from" to startTime,
-                    "mode" to "absolute",
-                    "to" to endTime
-            )
+        "time" to mapOf(
+            "from" to startTime,
+            "mode" to "absolute",
+            "to" to endTime
+        )
     ).toRison()
 
     private fun LocalDateTime.isoLocalDateTime() = this.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)

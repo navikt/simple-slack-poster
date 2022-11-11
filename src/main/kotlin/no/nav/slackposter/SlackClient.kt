@@ -16,26 +16,30 @@ enum class Severity(val emoji: String) {
 }
 
 class SlackClient(
-        private val webhookUrl: String,
-        private val channel: String,
-        private val application: String,
-        private val clusterName: String
+    private val webhookUrl: String,
+    private val channel: String,
+    private val application: String,
+    private val clusterName: String
 ) {
     companion object {
         @Suppress("JAVA_CLASS_ON_COMPANION")
         private val logger = LoggerFactory.getLogger(javaClass.enclosingClass)
         private val objectMapper = jacksonObjectMapper()
-                .registerModule(JavaTimeModule())
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+            .registerModule(JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
     }
 
     fun postMessage(text: String, severity: Severity = Severity.INFO) {
-        webhookUrl.post(objectMapper.writeValueAsString(mutableMapOf<String, Any>(
-                "channel" to channel,
-                "username" to "$application ($clusterName)",
-                "text" to text,
-                "icon_emoji" to severity.emoji
-        )))
+        webhookUrl.post(
+            objectMapper.writeValueAsString(
+                mutableMapOf<String, Any>(
+                    "channel" to channel,
+                    "username" to "$application ($clusterName)",
+                    "text" to text,
+                    "icon_emoji" to severity.emoji
+                )
+            )
+        )
     }
 
     private fun String.post(jsonPayload: String) {
