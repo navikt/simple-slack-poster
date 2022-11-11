@@ -1,31 +1,38 @@
-name: release
+name: Release (Github Package Registry)
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
-      - master
+      - 'master'
     paths-ignore:
       - '.github/dependabot.yml'
 
+env:
+  IMAGE: ghcr.io/${{ github.repository }}/simple-slack-poster:${{ github.sha }}
 
 jobs:
-  build_and_release:
+  release:
+    if: github.event.pull_request.merged == true
+    name: Create Release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
-      - uses: actions/setup-java@main
+        name: Checkout
+      - id: bump
+        uses: zwaldowski/match-label-action@main
         with:
-          java-version: 17
-          distribution: temurin
-      - name: test and build
-        run: ./gradlew -Pversion="$(git fetch || true && git rev-list --count $GITHUB_SHA)" build
-        env:
-          ORG_GRADLE_PROJECT_githubUser: x-access-token
-          ORG_GRADLE_PROJECT_githubPassword: ${{ secrets.GITHUB_TOKEN }}
-      - name: upload artifact
-        run: ./gradlew -Pversion="$(git fetch || true && git rev-list --count $GITHUB_SHA)" publish
-        env:
-          GITHUB_USERNAME: x-access-token
-          GITHUB_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-          ORG_GRADLE_PROJECT_githubUser: x-access-token
-          ORG_GRADLE_PROJECT_githubPassword: ${{ secrets.GITHUB_TOKEN }}
+          allowed: major,minor,patch
+      - id: next_version
+        uses: zwaldowski/semver-release-action@main
+        name: Prepare and tag release with semver
+        with:
+          bump: ${{ steps.bump.outputs.match }}
+          prefix: v
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ncipollo/release-action@main
+        name: Create release
+        with:
+          tag: ${{ steps.next_version.outputs.version_tag }}
+          generateReleaseNotes: true

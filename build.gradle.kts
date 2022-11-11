@@ -6,14 +6,9 @@ plugins {
     `maven-publish`
 }
 
-val githubUser: String by project
-val githubPassword: String by project
-
 repositories {
     mavenCentral()
 }
-
-version = properties["version"] ?: "local"
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -28,42 +23,5 @@ tasks.withType<KotlinCompile> {
     kotlinOptions{
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "17"
-    }
-}
-
-publishing {
-    repositories {
-        maven {
-            url = uri("https://maven.pkg.github.com/navikt/simple-slack-poster")
-            credentials {
-                username = System.getenv("GITHUB_USERNAME")
-                password = System.getenv("GITHUB_PASSWORD")
-            }
-        }
-    }
-    publications {
-        create<MavenPublication>("mavenJava") {
-
-            pom {
-                name.set("simple-slack-poster")
-                description.set("Library for posting messages to Slack")
-                url.set("https://github.com/navikt/simple-slack-poster")
-                groupId = "no.nav.slackposter"
-                artifactId = "simple-slack-poster"
-                licenses {
-                    license {
-                        name.set("MIT License")
-                        url.set("https://opensource.org/licenses/MIT")
-                    }
-                }
-
-                scm {
-                    connection.set("scm:git:https://github.com/navikt/simple-slack-poster.git")
-                    developerConnection.set("scm:git:https://github.com/navikt/simple-slack-poster.git")
-                    url.set("https://github.com/navikt/simple-slack-poster")
-                }
-            }
-            from(components["java"])
-        }
     }
 }
