@@ -10,8 +10,6 @@ repositories {
     mavenCentral()
 }
 
-version = properties["version"] ?: "local-build"
-
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("com.bazaarvoice.jackson:rison:2.9.10.2")
