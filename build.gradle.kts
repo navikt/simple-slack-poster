@@ -10,8 +10,6 @@ repositories {
     mavenCentral()
 }
 
-version = properties["version"] ?: "local-build"
-
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("com.bazaarvoice.jackson:rison:2.9.10.2")
@@ -25,5 +23,13 @@ tasks.withType<KotlinCompile> {
     kotlinOptions{
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "17"
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+        }
     }
 }
