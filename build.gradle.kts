@@ -27,3 +27,11 @@ tasks.withType<KotlinCompile> {
         jvmTarget = "17"
     }
 }
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+        }
+    }
+}
