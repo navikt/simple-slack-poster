@@ -6,6 +6,10 @@ plugins {
     `maven-publish`
 }
 
+group = "no.nav.slackposter"
+version = properties["version"] ?: "local-build"
+java.sourceCompatibility = JavaVersion.VERSION_11
+
 repositories {
     mavenCentral()
 }
