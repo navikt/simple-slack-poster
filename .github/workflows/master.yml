@@ -29,7 +29,6 @@ jobs:
         name: Prepare and tag release with semver
         with:
           bump: ${{ steps.bump.outputs.match }}
-          prefix: v
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: upload artifact
         run: ./gradlew -Pversion="$(echo ${{steps.next_version.outputs.version_tag}})" publish
