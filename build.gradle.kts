@@ -38,6 +38,24 @@ publishing {
     }
     publications {
         create<MavenPublication>("mavenJava") {
+            pom {
+                name.set("simple-slack-poster")
+                description.set("Simple Slack poster")
+                url.set("https://github.com/navikt/simple-slack-poster")
+
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("https://opensource.org/licenses/MIT")
+                    }
+                }
+
+                scm {
+                    connection.set("scm:git:https://github.com/navikt/simple-slack-poster.git")
+                    developerConnection.set("scm:git:https://github.com/navikt/simple-slack-poster.git")
+                    url.set("https://github.com/navikt/simple-slack-poster")
+                }
+            }
             from(components["java"])
         }
     }
