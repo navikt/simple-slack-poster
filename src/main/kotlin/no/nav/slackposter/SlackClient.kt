@@ -8,6 +8,7 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.URL
+import kotlin.io.path.Path
 
 enum class Severity(val emoji: String) {
     ERROR(":scream:"),
@@ -45,7 +46,7 @@ class SlackClient(
     private fun String.post(jsonPayload: String) {
         var connection: HttpURLConnection? = null
         try {
-            connection = (URL(this).openConnection() as HttpURLConnection).apply {
+            connection = (Path(this).toUri().toURL().openConnection() as HttpURLConnection).apply {
                 requestMethod = "POST"
                 connectTimeout = 5000
                 readTimeout = 5000
