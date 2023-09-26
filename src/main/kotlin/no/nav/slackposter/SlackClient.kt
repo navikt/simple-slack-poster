@@ -46,7 +46,7 @@ class SlackClient(
     private fun String.post(jsonPayload: String) {
         var connection: HttpURLConnection? = null
         try {
-            connection = (Path(this).toUri().toURL().openConnection() as HttpURLConnection).apply {
+            connection = (URL(this).openConnection() as HttpURLConnection).apply {
                 requestMethod = "POST"
                 connectTimeout = 5000
                 readTimeout = 5000
