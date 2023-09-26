@@ -64,8 +64,8 @@ class SlackClient(
             }
         } catch (err: SocketTimeoutException) {
             logger.warn("timeout waiting for reply", err)
-        } catch (err: IOException) {
-            logger.error("error posting to slack: {}", err.message, err)
+        } catch (err: Exception) {
+            logger.error("error posting to slack", err)
         } finally {
             connection?.disconnect()
         }
