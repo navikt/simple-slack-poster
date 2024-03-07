@@ -22,7 +22,7 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v4
         name: Checkout
       - id: bump
         uses: zwaldowski/match-label-action@main
